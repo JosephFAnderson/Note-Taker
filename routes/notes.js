@@ -30,4 +30,23 @@ notes.post('/notes', (req, res) => {
     }
 })
 
+notes.delete('/notes/:id', (req, res) => {
+    const id = req.params.id;
+
+    if (req.params) {
+        readFromFile('db/db.json')
+            .then (data => {
+                const noteArray = JSON.parse(data)
+                for(let i = 0; i < noteArray.length; i++){
+                    if(noteArray[i].id === id){
+                        noteArray.splice(i, 1);
+                        writeToFile('db/db.json', noteArray);
+                        res.json('Note deleted');
+                    }
+                }
+                
+            })
+    }
+})
+
 module.exports = notes;
