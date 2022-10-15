@@ -1,18 +1,13 @@
 const notes = require('express').Router();
 const {v4 : uuidv4} = require('uuid');
-const {
-    readFromFile,
-    writeToFile,
-    readAndWriteFile
-} = require('../helpers/fsutils');
+const { readFromFile, writeToFile, readAndWriteFile } = require('../helpers/fsutils');
 
-
+// Return db.json data to client side to allow population of stored notes
 notes.get('/notes', (req, res) => {
     readFromFile('db/db.json').then(data => res.json(JSON.parse(data)));
 })
 
-// Need to ASYNC probably, pr write normal functions and call
-
+// Add newly saved note to db.json
 notes.post('/notes', (req, res) => {
     const {title, text} = req.body;
 
@@ -30,6 +25,7 @@ notes.post('/notes', (req, res) => {
     }
 })
 
+// Remove requested note from db.json
 notes.delete('/notes/:id', (req, res) => {
     const id = req.params.id;
 
